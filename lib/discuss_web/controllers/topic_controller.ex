@@ -18,6 +18,11 @@ defmodule DiscussWeb.TopicController do
     # conn is passed by default in the render statement
   end
 
+  def index(conn, _params) do
+    topics = Repo.all(Topic) # Discuss.Repo.all(Discuss.Topic)
+    render conn, "index.html", topics: topics
+  end
+
   def create(conn, %{"topic" => topic}) do
     #IO.inspect(params)
     changeset = Topic.changeset(%Topic{}, topic)
