@@ -10,6 +10,10 @@ defmodule DiscussWeb.TopicController do
     # conn is a struct represents the incoming request and the outgoing request, is as request in rails
     struct = %Topic{}
     params = %{}
-    changeset = Topic.changeset(struct, params)
+    changeset = Topic.changeset(struct, params) # empty changeset
+
+    render conn, "new.html", changeset: changeset # changeset passed as a keyword list and is going to be like an instance var in the view
+    # specify which template we want to render
+    # conn is passed by default in the render statement
   end
 end
