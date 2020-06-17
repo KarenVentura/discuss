@@ -23,13 +23,23 @@ defmodule DiscussWeb.TopicController do
     render conn, "index.html", topics: topics
   end
 
+  def edit(conn, %{"id" => topic_id}) do
+    topic = Repo.get(Topic, topic_id)
+    changeset = Topic.changeset(Topic)
+    
+    render conn, "edit.html", changeset: changeset, topic: topic
+  end
+
   def create(conn, %{"topic" => topic}) do
     #IO.inspect(params)
     changeset = Topic.changeset(%Topic{}, topic)
 
     # repo functionality is inserted by line 4
     case Repo.insert(changeset) do
-      {:ok, post} -> IO.inspect(post)
+      {:ok, post} ->
+        conn
+        |> put_flash(:info, "Topic created") # set flash message
+        |> redirect(to: Routes.topic_path(conn, :index)) # redirect when the status is ok and the topic is created
       {:error, changeset} -> # if it fails we need to render again new like rails, valid?
         render conn, "new.html", changeset: changeset
     end
