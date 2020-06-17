@@ -11,5 +11,8 @@ defmodule DiscussWeb.TopicController do
     IO.puts "++++++"
     IO.inspect params
     #render(conn, "index.html")
+    struct = %Discuss.Topic{}
+    params = %{}
+    changeset = Discuss.Topic.changeset(struct, params)
   end
 end
