@@ -9,7 +9,7 @@ defmodule Discuss.Topic do
   end
 
   @doc false
-  def changeset(%Topic{} = topic, attrs) do # attrs \\ %{} -> is like attrs = {} in ruby, a default value
+  def changeset(%Topic{} = topic, attrs \\ %{}) do # attrs \\ %{} -> is like attrs = {} in ruby, a default value
     # struct represents the record in our database
     # params are the values we want to update our record with
     # cast produces the changeset, the object that records the updates in our db that we need to make

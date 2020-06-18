@@ -6,11 +6,11 @@ defmodule DiscussWeb.TopicController do
   alias Discuss.Repo
 
   def new(conn, _params) do
-    #IO.puts "++++++"
+    # IO.puts "++++++"
     # inspect show every value of the data structure
     # conn is a struct represents the incoming request and the outgoing request, is as request in rails
-    #struct = %Topic{}
-    #params = %{}
+    # struct = %Topic{}
+    # ccparams = %{}
     changeset = Topic.changeset(%Topic{}, %{}) # empty changeset
 
     render conn, "new.html", changeset: changeset # changeset passed as a keyword list and is going to be like an instance var in the view
@@ -25,7 +25,7 @@ defmodule DiscussWeb.TopicController do
 
   def edit(conn, %{"id" => topic_id}) do
     topic = Repo.get(Topic, topic_id)
-    changeset = Topic.changeset(Topic)
+    changeset = Topic.changeset(topic)
     
     render conn, "edit.html", changeset: changeset, topic: topic
   end
@@ -36,12 +36,28 @@ defmodule DiscussWeb.TopicController do
 
     # repo functionality is inserted by line 4
     case Repo.insert(changeset) do
-      {:ok, post} ->
+      {:ok, _topic} ->
         conn
         |> put_flash(:info, "Topic created") # set flash message
         |> redirect(to: Routes.topic_path(conn, :index)) # redirect when the status is ok and the topic is created
       {:error, changeset} -> # if it fails we need to render again new like rails, valid?
         render conn, "new.html", changeset: changeset
+    end
+  end
+
+  def update(conn, %{"id" => topic_id, "topic" => topic}) do
+    old_topic = Repo.get(Topic, topic_id)
+    changeset = Topic.changeset(old_topic, topic)
+    # the same as the following code
+    # changeset = Repo.get(Topic, topic_id) |> Topic.changeset(topic)
+    
+    case Repo.update(changeset) do
+      {:ok, _topic} ->
+        conn
+        |> put_flash(:info, "Topic updated") # set flash message
+        |> redirect(to: Routes.topic_path(conn, :index)) # redirect when the status is ok and the topic is created
+      {:error, changeset} -> # if it fails we need to render again new like rails, valid?
+        render conn, "edit.html", changeset: changeset, topic: old_topic # we are sending old topic because edit action use it
     end
   end
 end
