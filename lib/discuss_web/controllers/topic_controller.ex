@@ -60,4 +60,13 @@ defmodule DiscussWeb.TopicController do
         render conn, "edit.html", changeset: changeset, topic: old_topic # we are sending old topic because edit action use it
     end
   end
+
+  def delete(conn, %{"id" => topic_id}) do
+    Repo.get!(Topic, topic_id)
+    |> Repo.delete # ! raises Ecto.NoResultsError if no record was found.
+
+    conn
+    |> put_flash(:info, "Topic deleted")
+    |> redirect(to: Routes.topic_path(conn, :index))
+  end
 end
