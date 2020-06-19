@@ -13,8 +13,9 @@ defmodule DiscussWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", DiscussWeb do
-    pipe_through :browser
+  scope "/", DiscussWeb do # scopes works like rails
+    pipe_through :browser # this line says, before go to the controller action
+    # first need to proccess all inside of line 4
 
     #get "/", PageController, :index
     #get "/topics/new", TopicController, :new
@@ -24,6 +25,13 @@ defmodule DiscussWeb.Router do
     #put "/topics/:id/", TopicController, :update
     #delete "/topics/:id", TopicController, :edit
     resources "/topics", TopicController # resources as rails
+  end
+
+  scope "/auth", DiscussWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request # this request is not defined by us is defined by plug Ueberauth in auth_controller.ex line 3
+    get "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.

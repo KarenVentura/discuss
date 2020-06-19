@@ -7,7 +7,7 @@ defmodule DiscussWeb.TopicController do
 
   def new(conn, _params) do
     # IO.puts "++++++"
-    # inspect show every value of the data structure
+    # inspect show every value of the data structure, with puts it does not show the values of the structure
     # conn is a struct represents the incoming request and the outgoing request, is as request in rails
     # struct = %Topic{}
     # ccparams = %{}
