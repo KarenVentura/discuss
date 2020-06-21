@@ -7,6 +7,7 @@ defmodule DiscussWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Discuss.Plugs.SetUser # calling our new plug defined
   end
 
   pipeline :api do
@@ -17,7 +18,7 @@ defmodule DiscussWeb.Router do
     pipe_through :browser # this line says, before go to the controller action
     # first need to proccess all inside of line 4
 
-    #get "/", PageController, :index
+    get "/", PageController, :index
     #get "/topics/new", TopicController, :new
     #post "/topics", TopicController, :create
     #get "/topics", TopicController, :index
@@ -30,9 +31,11 @@ defmodule DiscussWeb.Router do
   scope "/auth", DiscussWeb do
     pipe_through :browser
 
+    get "/signout", SessionController, :signout
     get "/:provider", AuthController, :request # this request is not defined by us is defined by plug Ueberauth in auth_controller.ex line 3
     get "/:provider/callback", AuthController, :callback
   end
+
 
   # Other scopes may use custom stacks.
   # scope "/api", DiscussWeb do
