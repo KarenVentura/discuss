@@ -31,7 +31,7 @@ defmodule DiscussWeb.Router do
   scope "/auth", DiscussWeb do
     pipe_through :browser
 
-    get "/signout", SessionController, :signout
+    get "/signout", AuthController, :signout
     get "/:provider", AuthController, :request # this request is not defined by us is defined by plug Ueberauth in auth_controller.ex line 3
     get "/:provider/callback", AuthController, :callback
   end
