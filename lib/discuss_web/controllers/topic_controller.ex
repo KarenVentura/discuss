@@ -6,6 +6,7 @@ defmodule DiscussWeb.TopicController do
   alias Discuss.Repo
   # this plug is like a before action in Rails and you can specify the actions
   #plug Discuss.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
+  plug :check_topic_owner when action in [:update, :edit, :delete] # is going to check is exist a function called like that.
 
   def new(conn, _params) do
     # IO.puts "++++++"
@@ -76,5 +77,18 @@ defmodule DiscussWeb.TopicController do
     conn
     |> put_flash(:info, "Topic deleted")
     |> redirect(to: Routes.topic_path(conn, :index))
+  end
+
+  def check_topic_owner(conn, _params) do
+    %{params: %{"id" => topic_id}} = conn
+
+    if Repo.get(Topic, topic_id).user_id == conn.assigns.user.id do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You cannot edit that")
+      |> redirect(to: Routes.topic_path(conn, :index))
+      |> halt()
+    end
   end
 end
