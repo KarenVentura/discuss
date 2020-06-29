@@ -4,6 +4,8 @@ defmodule DiscussWeb.TopicController do
   use DiscussWeb, :controller 
   alias Discuss.Topic # with this we can use only Topic to call something
   alias Discuss.Repo
+  # this plug is like a before action in Rails and you can specify the actions
+  #plug Discuss.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
 
   def new(conn, _params) do
     # IO.puts "++++++"
@@ -32,8 +34,13 @@ defmodule DiscussWeb.TopicController do
   end
 
   def create(conn, %{"topic" => topic}) do
-    #IO.inspect(params)
-    changeset = Topic.changeset(%Topic{}, topic)
+    # IO.inspect(params)
+    # changeset = Topic.changeset(%Topic{}, topic) Removing this line for the next one
+    # to create the topic and user association
+
+    changeset = conn.assigns.user
+      |> Ecto.build_assoc(:topics)
+      |> Topic.changeset(topic)
 
     # repo functionality is inserted by line 4
     case Repo.insert(changeset) do

@@ -6,7 +6,9 @@ defmodule Discuss.Topic do
 
   schema "topics" do # way of link your database table with the current model and say what fields are you going to use
     field :title, :string
+    belongs_to :user, Discuss.User
   end
+  # Discuss.Repo.get(Discuss.User, 1) make a consult to user with id 1
 
   @doc false
   def changeset(%Topic{} = topic, attrs \\ %{}) do # attrs \\ %{} -> is like attrs = {} in ruby, a default value
